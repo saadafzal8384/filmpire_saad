@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetActorQuery, useGetActorMoviesQuery } from "../../services/TMDB";
@@ -14,18 +14,18 @@ import {
   Rating,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import { MovieList } from "../";
-
+import { MovieList, Pagination } from "../";
+import { useHistory } from "react-router-dom";
 import useStyles from "./styles";
 
 const Actors = () => {
   const { id } = useParams();
+  const [page, setPage] = useState(1);
   const { data, isFetching } = useGetActorQuery(id);
   const { data: actorMovies, isFetching: isActorMoviesFetching } =
-    useGetActorMoviesQuery(id);
+    useGetActorMoviesQuery({ id, page });
   const classes = useStyles();
-
-  console.log(data);
+  const history = useHistory();
 
   if (isFetching) {
     return (
@@ -62,7 +62,7 @@ const Actors = () => {
                   variant="contained"
                   target="_blank"
                   rel="noopener noreferr"
-                  href={`https://www.imdb.com/title/${data?.imdb_id}`}
+                  href={`https://www.imdb.com/name/${data?.imdb_id}`}
                 >
                   IMDB
                 </Button>
@@ -77,6 +77,7 @@ const Actors = () => {
                     color="inherit"
                     variant="subtitle2"
                     style={{ textDecoration: "none" }}
+                    onClick={() => history.goBack()}
                   ></Typography>
                   Back
                 </Button>
@@ -89,11 +90,12 @@ const Actors = () => {
         <Typography variant="h2" gutterBottom align="center">
           Movies
         </Typography>
-        {actorMovies ? (
-          <MovieList movies={actorMovies} numberOfMovies={12} />
-        ) : (
-          <Box>Sorry, nothing can be recommended at the moment</Box>
-        )}
+        {actorMovies && <MovieList movies={actorMovies} numberOfMovies={12} />}
+        <Pagination
+          currentPage={page}
+          setPage={setPage}
+          totalPages={actorMovies?.total_pages}
+        />
       </Box>
     </Grid>
   );
