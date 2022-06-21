@@ -95,9 +95,7 @@ const NavBar = () => {
                 <Avatar
                   style={{ width: 30, height: 30 }}
                   alt="Profile"
-                  src={
-                    "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fvectors%2Favatar-icon-placeholder-facebook-1577909%2F&psig=AOvVaw0V4ApSpnvHSEKeaisaBwxV&ust=1654604344443000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCOjZmtPnmPgCFQAAAAAdAAAAABAD"
-                  }
+                  src={`https://www.themoviedb.org/t/p/w64_and_h64_face${user?.avatar?.tmdb?.avatar_path}`}
                 />
               </Button>
             )}
